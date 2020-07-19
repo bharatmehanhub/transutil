@@ -9,8 +9,8 @@ The solution is currently compatible with all three platforms
 i.e. MacOS, Windows and Linux systems.
 
 Currently, this first version of 'transutil' only implements copy  
-functionality using copyfile method. The method do gives us an option to
-copy metadata from the source.
+functionality using copyfile method. This method also gives us an option  
+to copy metadata from the source to defined targets.
 
 
 ### Contributors
