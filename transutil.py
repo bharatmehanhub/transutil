@@ -75,11 +75,11 @@ class File:
     def copyfile(self, dst, *, copy_meta=False, follow_symlinks=True):
         self.target_path = dst
         if os.path.isdir(dst):
-            dst = os.path.join(os.path.basename(self.source_path))
+            dst = os.path.join(dst, os.path.basename(self.source_path))
 
         if self._samefile(dst):
             raise SameFileError("{!r} and {!r} are the same file".format(self.source_path, dst))
-        for fn in [self.source_path, dst]:
+        for fn in [self.source_path, self.target_path]:
             try:
                 st = os.stat(fn)
             except OSError:
@@ -90,10 +90,10 @@ class File:
                 if stat.S_ISFIFO(st.st_mode):
                     raise SpecialFileError("`%s` is a named pipe" % fn)
         if not follow_symlinks and os.path.islink(self.source_path):
-            os.symlink(os.readlink(self.source_path), dst)
+            os.symlink(os.readlink(self.source_path), self.target_path)
         else:
             with open(self.source_path, 'rb') as fsrc:
-                with open(dst, 'wb') as fdst:
+                with open(self.target_path, 'wb') as fdst:
                     self.copyfileobj(fsrc, fdst)
 
         if copy_meta:
